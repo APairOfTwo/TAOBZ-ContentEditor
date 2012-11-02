@@ -15,12 +15,13 @@ public class GamePanel extends JPanel implements Runnable {
 	private BufferedImage dbImage;
 	private BufferedImage tileset;
 	private Graphics2D dbg;
-	private TileMap map;
+	public static TileMap map;
 	private KeyboardInput keyboardInput	= new KeyboardInput();
+	private MouseInput mouseInput = new MouseInput();
 	private long diffTime, previousTime;
 	private int fps, sFps;
 	private int fpscount;
-	private int mouseX, mouseY;
+	private Item item;
 
 	public GamePanel() {
 		setBackground(Color.white);
@@ -38,35 +39,8 @@ public class GamePanel extends JPanel implements Runnable {
 			}
 		}
 	
-		addMouseMotionListener(new MouseMotionListener() {
-			@Override
-			public void mouseMoved(MouseEvent e) {
-				mouseX = e.getX();
-				mouseY = e.getY();
-			}
+		// AQUI ESTAVAM AS ENTRADAS MOUSE
 		
-			@Override
-			public void mouseDragged(MouseEvent e) {}
-		});
-	
-		addMouseListener(new MouseListener() {
-			@Override
-			public void mouseReleased(MouseEvent arg0) {}
-		
-			@Override
-			public void mousePressed(MouseEvent arg0) {
-				Point p1 = arg0.getPoint();
-			}
-		
-			@Override
-			public void mouseExited(MouseEvent arg0) {}
-		
-			@Override
-			public void mouseEntered(MouseEvent arg0) {}
-		
-			@Override
-			public void mouseClicked(MouseEvent arg0) {}
-		});
 	
 		loadTileset();
 		if(tileset == null) System.exit(0);
@@ -153,7 +127,7 @@ public class GamePanel extends JPanel implements Runnable {
 			paintImmediately(0, 0, PWIDTH, PHEIGHT); // paint with the buffer
 			
 			try {
-				Thread.sleep(2);
+				Thread.sleep(10);
 			} catch(InterruptedException ex) {}
 		
 			diffTime = System.currentTimeMillis() - previousTime;
@@ -174,10 +148,13 @@ public class GamePanel extends JPanel implements Runnable {
 
 	private void gameUpdate() {
 		scrollMap();
+		//System.out.println(mouseInput.blockX);
+		System.out.println(mouseInput.blockClickX+","+mouseInput.blockClickY);
 	}
 	
 	private void gameRender() {
 		map.selfDraws(dbg);
+		dbg.drawRect(mouseInput.blockX*16-map.MapX, mouseInput.blockY*16-map.MapY, 16, 16);
 	}
 	
 	public void paintComponent(Graphics g) {
@@ -189,6 +166,8 @@ public class GamePanel extends JPanel implements Runnable {
 	public static void main(String args[]) {
 		GamePanel ttPanel = new GamePanel();
 		ttPanel.addKeyListener(ttPanel.keyboardInput);
+		ttPanel.addMouseListener(ttPanel.mouseInput);
+		ttPanel.addMouseMotionListener(ttPanel.mouseInput);
 		
 		JFrame app = new JFrame("TAOBZ-ContentEditor");
 		app.getContentPane().add(ttPanel, BorderLayout.CENTER);
