@@ -21,11 +21,7 @@ public class MouseInput implements MouseListener, MouseMotionListener {
 	public void mouseExited(MouseEvent e) {}
 
 	@Override
-	public void mousePressed(MouseEvent e) {
-//		pressed = true;
-//		blockClickX = (e.getX() + GamePanel.map.MapX) / 16;
-//		blockClickY = (e.getY() + GamePanel.map.MapY) / 16;
-	}
+	public void mousePressed(MouseEvent e) {}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {}

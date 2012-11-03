@@ -7,14 +7,6 @@ import java.io.IOException;
 import java.io.InputStream;
 
 
-/*
- * BaseLayer = background -> no collision
- * Layer1 = midground -> collision to not fall
- * Layer2 = spikes on the ground -> death on collision
- * Layer3 = objects in the background or foreground -> no collision
- * 
- */
-
 public class TileMap {
 
 	public Image TileSet = null;
@@ -39,10 +31,8 @@ public class TileMap {
 		TilePLinhaTileset = TileSet.getWidth(null) >> 4;
 	}
 
-	//public void OpenMap(String nomemapa) {
 	public void OpenMap(File mapFile) {
 		try {
-			//InputStream In = getClass().getResourceAsStream(nomemapa);
 			InputStream In = new FileInputStream(mapFile);
 			
 			System.out.println(" In " + In.available());
@@ -54,14 +44,12 @@ public class TileMap {
 			Altura = ReadCInt(data); // lê Largura
 
 			System.out.println(" Largura " + Largura);
-
 			System.out.println(" Altura " + Altura);
 
 			int ltilex = ReadCInt(data);// lê Larg Tile
 			int ltiley = ReadCInt(data);// lê Altura Tile
 
 			System.out.println(" ltilex " + ltilex);
-
 			System.out.println(" ltiley " + ltiley);
 
 			byte nome[] = new byte[32];

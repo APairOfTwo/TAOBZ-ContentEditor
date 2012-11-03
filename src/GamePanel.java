@@ -15,23 +15,30 @@ public class GamePanel extends JPanel implements Runnable {
 	private boolean running = false; 
 	private BufferedImage dbImage;
 	private BufferedImage tileset;
+	private BufferedImage demon;
+	private BufferedImage berserker;
+	private BufferedImage gargoyle;
+	private BufferedImage vegetarian;
 	private Graphics2D dbg;
 	public static TileMap map;
 	private KeyboardInput keyboardInput	= new KeyboardInput();
 	private MouseInput mouseInput = new MouseInput();
 	private long diffTime, previousTime;
-	private int fps, sFps;
-	private int fpscount;
 	private ArrayList<Item> itens = new ArrayList<Item>();
 	private int itemId;
 	private boolean showSaveDialog = false;
+	private boolean showSelectedItem = false;
+	private String strSelected;
+	private int counter = 0;
+	public static GamePanel instance;
 
 	public GamePanel() {
+		instance = this;
 		setBackground(Color.white);
 		setPreferredSize(new Dimension(PWIDTH, PHEIGHT));
 		setFocusable(true);
 		requestFocus();
-	
+		
 		if (dbImage == null) {
 			dbImage = new BufferedImage(PWIDTH, PHEIGHT, BufferedImage.TYPE_INT_ARGB);
 			if (dbImage == null) {
@@ -47,6 +54,24 @@ public class GamePanel extends JPanel implements Runnable {
 		
 		loadTilemap();
 		if(map == null) System.exit(0);
+		
+		demon = loadImage("demon.png");
+		gargoyle = loadImage("gargoyle.png");
+		vegetarian = loadImage("vegetarian.png");
+		berserker = loadImage("berserker.png");
+	}
+	
+	public static BufferedImage loadImage(String source) {
+		BufferedImage image = null;
+		try {
+			BufferedImage tmp = ImageIO.read(GamePanel.instance.getClass().getResource(source));
+			image = new BufferedImage(tmp.getWidth(),tmp.getHeight(),BufferedImage.TYPE_INT_ARGB);
+			image.getGraphics().drawImage(tmp,0,0,null);
+			tmp = null;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return image;
 	}
 	
 	public void loadTileset() {
@@ -72,7 +97,6 @@ public class GamePanel extends JPanel implements Runnable {
 			File f = fc.getSelectedFile();
 			map = new TileMap(tileset, (PWIDTH>>4)+(((PWIDTH&0x000f)>0)?1:0), (PHEIGHT>>4)+(((PHEIGHT%16)>0)?1:0));
 			map.OpenMap(f);
-			//map.OpenMap(f.getName());
 		}
 	}
 	
@@ -119,10 +143,6 @@ public class GamePanel extends JPanel implements Runnable {
 		}
 	}
 
-	public void stopGame() {
-		running = false;
-	}
-
 	public void run() {
 		running = true;
 	
@@ -143,11 +163,7 @@ public class GamePanel extends JPanel implements Runnable {
 			previousTime = System.currentTimeMillis();
 		
 			if(segundo!=((int)(previousTime/1000))) {
-				fps = sFps;
-				sFps = 1;
 				segundo = ((int)(previousTime/1000));
-			} else {
-				sFps++;
 			}
 			
 			if(showSaveDialog) {
@@ -162,17 +178,38 @@ public class GamePanel extends JPanel implements Runnable {
 	private void update() {
 		scrollMap();
 		
-		if(keyboardInput.SPACE) {
+		if(keyboardInput.DEMON) {
 			itemId = 1;
-		} else {
-			if(keyboardInput.ENTER) {
-				itemId = 2;
-			} else {
-				if(keyboardInput.ESCAPE) {
-					showSaveDialog = true;
-					keyboardInput.ESCAPE = false;
-				}
+			strSelected = "Demon";
+			showSelectedItem = true;
+		}
+		if(keyboardInput.GARGOYLE) {
+			itemId = 2;
+			strSelected = "Gargoyle";
+			showSelectedItem = true;
+		}
+		if(keyboardInput.VEGETARIAN) {
+			itemId = 3;
+			strSelected = "Vegetarian";
+			showSelectedItem = true;
+		}
+		if(keyboardInput.BERSERKER) {
+			itemId = 4;
+			strSelected = "Berserker";
+			showSelectedItem = true;
+		}
+		
+		if(showSelectedItem) {
+			counter += diffTime;
+			if(counter >= 5000) {
+				showSelectedItem = false;
+				counter = 0;
 			}
+		}
+		
+		if(keyboardInput.ESCAPE) {
+			showSaveDialog = true;
+			keyboardInput.ESCAPE = false;
 		}
 		
 		if(mouseInput.clicked) {
@@ -181,10 +218,6 @@ public class GamePanel extends JPanel implements Runnable {
 				itens.add(new Item(itemId, mouseInput.blockClickX, mouseInput.blockClickY));
 			}
 		}
-		//System.out.println(mouseInput.blockX);
-		//System.out.println(mouseInput.blockClickX+","+mouseInput.blockClickY);
-		//System.out.println(itemId);
-		//System.out.println(itens.size());
 	}
 	
 	private void scrollMap() {
@@ -212,6 +245,31 @@ public class GamePanel extends JPanel implements Runnable {
 	
 	private void render() {
 		map.selfDraws(dbg);
+		
+		if(showSelectedItem) {
+			dbg.setColor(Color.BLACK);
+			dbg.fillRect(10, 10, 135, 20);
+			dbg.setColor(Color.WHITE);
+			dbg.drawString("Selected: "+strSelected, 20, 24);
+		}
+		
+		for(int i = 0; i < itens.size(); i++) {
+			switch (itens.get(i).id) {
+			case 1:
+				dbg.drawImage(demon, itens.get(i).x*16-map.MapX, itens.get(i).y*16-map.MapY, null);
+				break;
+			case 2:
+				dbg.drawImage(gargoyle, itens.get(i).x*16-map.MapX, itens.get(i).y*16-map.MapY, null);
+				break;
+			case 3:
+				dbg.drawImage(vegetarian, itens.get(i).x*16-map.MapX, itens.get(i).y*16-map.MapY, null);
+				break;
+			case 4:
+				dbg.drawImage(berserker, itens.get(i).x*16-map.MapX, itens.get(i).y*16-map.MapY, null);
+				break;
+			}
+		}
+		
 		dbg.drawRect(mouseInput.blockX*16-map.MapX, mouseInput.blockY*16-map.MapY, 16, 16);
 	}
 	
