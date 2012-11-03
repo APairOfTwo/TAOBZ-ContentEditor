@@ -1,14 +1,18 @@
-import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
 
 public class MouseInput implements MouseListener, MouseMotionListener {
+	public boolean clicked = false;
 	public int blockX, blockY, blockClickX, blockClickY;
 	
 	@Override
-	public void mouseClicked(MouseEvent e) {}
+	public void mouseClicked(MouseEvent e) {
+		clicked = true;
+		blockClickX = (e.getX() + GamePanel.map.MapX) / 16;
+		blockClickY = (e.getY() + GamePanel.map.MapY) / 16;
+	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {}
@@ -18,14 +22,13 @@ public class MouseInput implements MouseListener, MouseMotionListener {
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		blockClickX = (e.getX() + GamePanel.map.MapX) / 16;
-		blockClickY = (e.getY() + GamePanel.map.MapY) / 16;
+//		pressed = true;
+//		blockClickX = (e.getX() + GamePanel.map.MapX) / 16;
+//		blockClickY = (e.getY() + GamePanel.map.MapY) / 16;
 	}
 
 	@Override
-	public void mouseReleased(MouseEvent e) {
-		
-	}
+	public void mouseReleased(MouseEvent e) {}
 
 	@Override
 	public void mouseDragged(MouseEvent e) {}

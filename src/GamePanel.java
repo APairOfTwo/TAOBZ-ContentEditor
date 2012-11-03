@@ -1,9 +1,10 @@
 import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
 import java.io.*;
+import java.util.ArrayList;
 import java.awt.image.*;
 import javax.imageio.ImageIO;
+
 
 @SuppressWarnings("serial")
 public class GamePanel extends JPanel implements Runnable {
@@ -21,7 +22,9 @@ public class GamePanel extends JPanel implements Runnable {
 	private long diffTime, previousTime;
 	private int fps, sFps;
 	private int fpscount;
-	private Item item;
+	private ArrayList<Item> itens = new ArrayList<Item>();
+	private int itemId;
+	private boolean showSaveDialog = false;
 
 	public GamePanel() {
 		setBackground(Color.white);
@@ -38,9 +41,6 @@ public class GamePanel extends JPanel implements Runnable {
 				dbg = (Graphics2D)dbImage.getGraphics();
 			}
 		}
-	
-		// AQUI ESTAVAM AS ENTRADAS MOUSE
-		
 	
 		loadTileset();
 		if(tileset == null) System.exit(0);
@@ -75,26 +75,34 @@ public class GamePanel extends JPanel implements Runnable {
 		}
 	}
 	
-	private void scrollMap() {
-		if(keyboardInput.LEFT) {
-			if(map.MapX > 0) {
-				map.MapX -= SCROLL_SPEED;
+	public void saveCsv() {
+		int op = JOptionPane.showConfirmDialog(null, "Deseja salvar?");
+		
+		switch(op) {
+		case JOptionPane.YES_OPTION:
+			String fileName = JOptionPane.showInputDialog("Digite o nome do arquivo a ser salvo:");
+			try {
+				FileWriter fstream = new FileWriter(fileName + ".csv");
+				BufferedWriter out = new BufferedWriter(fstream); 
+				for(Item item: itens) {
+					out.write(Integer.toString(item.id)+";"+Integer.toString(item.x)+";"+Integer.toString(item.y)+"\n");
+				}
+				out.close();
+			} catch (Exception e) {
+				System.err.println("Erro: " + e.getMessage());
 			}
-		}
-		if(keyboardInput.RIGHT) {
-			if(map.MapX + PWIDTH < map.Largura << 4) {
-				map.MapX += SCROLL_SPEED;
-			}
-		}
-		if(keyboardInput.UP) {
-			if(map.MapY > 0) {
-				map.MapY -= SCROLL_SPEED;
-			}
-		}
-		if(keyboardInput.DOWN) {
-			if(map.MapY + PHEIGHT < map.Altura << 4) {
-				map.MapY += SCROLL_SPEED;
-			}
+			running = false;
+			showSaveDialog = false;
+			break;
+
+		case JOptionPane.NO_OPTION:
+			running = false;
+			showSaveDialog = false;
+			break;
+			
+		default:
+			showSaveDialog = false;
+			break;
 		}
 	}
 	
@@ -121,9 +129,9 @@ public class GamePanel extends JPanel implements Runnable {
 		diffTime = 0;
 		previousTime = System.currentTimeMillis();
 	
-		while(running) {
-			gameUpdate();
-			gameRender();
+		while(running || showSaveDialog) {
+			update();
+			render();
 			paintImmediately(0, 0, PWIDTH, PHEIGHT); // paint with the buffer
 			
 			try {
@@ -140,19 +148,68 @@ public class GamePanel extends JPanel implements Runnable {
 			} else {
 				sFps++;
 			}
+			
+			if(showSaveDialog) {
+				saveCsv();
+			}
 		}
 		System.exit(0);
 	}
 
 	int timerfps = 0;
 
-	private void gameUpdate() {
+	private void update() {
 		scrollMap();
+		
+		if(keyboardInput.SPACE) {
+			itemId = 1;
+		} else {
+			if(keyboardInput.ENTER) {
+				itemId = 2;
+			} else {
+				if(keyboardInput.ESCAPE) {
+					showSaveDialog = true;
+					keyboardInput.ESCAPE = false;
+				}
+			}
+		}
+		
+		if(mouseInput.clicked) {
+			mouseInput.clicked = false;
+			if(itemId != 0) {
+				itens.add(new Item(itemId, mouseInput.blockClickX, mouseInput.blockClickY));
+			}
+		}
 		//System.out.println(mouseInput.blockX);
-		System.out.println(mouseInput.blockClickX+","+mouseInput.blockClickY);
+		//System.out.println(mouseInput.blockClickX+","+mouseInput.blockClickY);
+		//System.out.println(itemId);
+		System.out.println(itens.size());
 	}
 	
-	private void gameRender() {
+	private void scrollMap() {
+		if(keyboardInput.LEFT) {
+			if(map.MapX > 0) {
+				map.MapX -= SCROLL_SPEED;
+			}
+		}
+		if(keyboardInput.RIGHT) {
+			if(map.MapX + PWIDTH < map.Largura << 4) {
+				map.MapX += SCROLL_SPEED;
+			}
+		}
+		if(keyboardInput.UP) {
+			if(map.MapY > 0) {
+				map.MapY -= SCROLL_SPEED;
+			}
+		}
+		if(keyboardInput.DOWN) {
+			if(map.MapY + PHEIGHT < map.Altura << 4) {
+				map.MapY += SCROLL_SPEED;
+			}
+		}
+	}
+	
+	private void render() {
 		map.selfDraws(dbg);
 		dbg.drawRect(mouseInput.blockX*16-map.MapX, mouseInput.blockY*16-map.MapY, 16, 16);
 	}
@@ -169,7 +226,7 @@ public class GamePanel extends JPanel implements Runnable {
 		ttPanel.addMouseListener(ttPanel.mouseInput);
 		ttPanel.addMouseMotionListener(ttPanel.mouseInput);
 		
-		JFrame app = new JFrame("TAOBZ-ContentEditor");
+		JFrame app = new JFrame("TAOBZ - ContentEditor");
 		app.getContentPane().add(ttPanel, BorderLayout.CENTER);
 		app.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		app.pack();
