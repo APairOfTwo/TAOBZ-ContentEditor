@@ -71,7 +71,8 @@ public class GamePanel extends JPanel implements Runnable {
 		if(fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
 			File f = fc.getSelectedFile();
 			map = new TileMap(tileset, (PWIDTH>>4)+(((PWIDTH&0x000f)>0)?1:0), (PHEIGHT>>4)+(((PHEIGHT%16)>0)?1:0));
-			map.OpenMap(f.getName());
+			map.OpenMap(f);
+			//map.OpenMap(f.getName());
 		}
 	}
 	
@@ -135,7 +136,7 @@ public class GamePanel extends JPanel implements Runnable {
 			paintImmediately(0, 0, PWIDTH, PHEIGHT); // paint with the buffer
 			
 			try {
-				Thread.sleep(10);
+				Thread.sleep(5);
 			} catch(InterruptedException ex) {}
 		
 			diffTime = System.currentTimeMillis() - previousTime;
@@ -183,7 +184,7 @@ public class GamePanel extends JPanel implements Runnable {
 		//System.out.println(mouseInput.blockX);
 		//System.out.println(mouseInput.blockClickX+","+mouseInput.blockClickY);
 		//System.out.println(itemId);
-		System.out.println(itens.size());
+		//System.out.println(itens.size());
 	}
 	
 	private void scrollMap() {

@@ -1,8 +1,11 @@
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+
 
 /*
  * BaseLayer = background -> no collision
@@ -36,11 +39,12 @@ public class TileMap {
 		TilePLinhaTileset = TileSet.getWidth(null) >> 4;
 	}
 
-	public void OpenMap(String nomemapa) {
-
+	//public void OpenMap(String nomemapa) {
+	public void OpenMap(File mapFile) {
 		try {
-			InputStream In = getClass().getResourceAsStream(nomemapa);
-
+			//InputStream In = getClass().getResourceAsStream(nomemapa);
+			InputStream In = new FileInputStream(mapFile);
+			
 			System.out.println(" In " + In.available());
 
 			DataInputStream data = new DataInputStream(In);
