@@ -261,13 +261,6 @@ public class GamePanel extends JPanel implements Runnable {
 	private void render() {
 		map.selfDraws(dbg);
 		
-		if(showSelectedItem) {
-			dbg.setColor(Color.BLACK);
-			dbg.fillRect(10, 10, PWIDTH-20, 20);
-			dbg.setColor(Color.WHITE);
-			dbg.drawString("Selected:     "+strSelected, 30, 24);
-		}
-		
 		for(int i = 0; i < itens.size(); i++) {
 			switch (itens.get(i).id) {
 			case 1:
@@ -295,6 +288,13 @@ public class GamePanel extends JPanel implements Runnable {
 				dbg.drawImage(berserker, itens.get(i).x*16-map.MapX, itens.get(i).y*16-map.MapY, null);
 				break;
 			}
+		}
+		
+		if(showSelectedItem) {
+			dbg.setColor(Color.BLACK);
+			dbg.fillRect(10, 10, PWIDTH-20, 20);
+			dbg.setColor(Color.WHITE);
+			dbg.drawString("Selected:     "+strSelected, 30, 24);
 		}
 		
 		dbg.setColor(Color.WHITE);
