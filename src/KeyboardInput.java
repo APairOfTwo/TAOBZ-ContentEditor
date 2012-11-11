@@ -13,6 +13,9 @@ public class KeyboardInput implements KeyListener {
 	public boolean GARGOYLE		= false;
 	public boolean VEGETARIAN	= false;
 	public boolean BERSERKER	= false;
+	public boolean BILLY_SP		= false;
+	public boolean ZOMBIE_SP	= false;
+	public boolean CHECKPOINT	= false;
 
 	public void keyTyped(KeyEvent e) {}
 
@@ -25,10 +28,13 @@ public class KeyboardInput implements KeyListener {
 		if (intKeyCode == KeyEvent.VK_SPACE)	SPACE		= true;
 		if (intKeyCode == KeyEvent.VK_ENTER)	ENTER		= true;
 		if (intKeyCode == KeyEvent.VK_ESCAPE)	ESCAPE		= true;
-		if (intKeyCode == KeyEvent.VK_1)		DEMON		= true;
-		if (intKeyCode == KeyEvent.VK_2)		GARGOYLE	= true;
-		if (intKeyCode == KeyEvent.VK_3)		VEGETARIAN	= true;
-		if (intKeyCode == KeyEvent.VK_4)		BERSERKER	= true;
+		if (intKeyCode == KeyEvent.VK_1)		BILLY_SP	= true;
+		if (intKeyCode == KeyEvent.VK_2)		ZOMBIE_SP	= true;
+		if (intKeyCode == KeyEvent.VK_3)		CHECKPOINT	= true;
+		if (intKeyCode == KeyEvent.VK_4)		DEMON		= true;
+		if (intKeyCode == KeyEvent.VK_5)		GARGOYLE	= true;
+		if (intKeyCode == KeyEvent.VK_6)		VEGETARIAN	= true;
+		if (intKeyCode == KeyEvent.VK_7)		BERSERKER	= true;
 	}
 
 	public void keyReleased(KeyEvent e) {
@@ -40,10 +46,13 @@ public class KeyboardInput implements KeyListener {
 		if (intKeyCode == KeyEvent.VK_SPACE)	SPACE		= false;
 		if (intKeyCode == KeyEvent.VK_ENTER)	ENTER		= false;
 		if (intKeyCode == KeyEvent.VK_ESCAPE)	ESCAPE		= false;
-		if (intKeyCode == KeyEvent.VK_1)		DEMON		= false;
-		if (intKeyCode == KeyEvent.VK_2)		GARGOYLE	= false;
-		if (intKeyCode == KeyEvent.VK_3)		VEGETARIAN	= false;
-		if (intKeyCode == KeyEvent.VK_4)		BERSERKER	= false;
+		if (intKeyCode == KeyEvent.VK_1)		BILLY_SP	= false;
+		if (intKeyCode == KeyEvent.VK_2)		ZOMBIE_SP	= false;
+		if (intKeyCode == KeyEvent.VK_3)		CHECKPOINT	= false;
+		if (intKeyCode == KeyEvent.VK_4)		DEMON		= false;
+		if (intKeyCode == KeyEvent.VK_5)		GARGOYLE	= false;
+		if (intKeyCode == KeyEvent.VK_6)		VEGETARIAN	= false;
+		if (intKeyCode == KeyEvent.VK_7)		BERSERKER	= false;
 	}
 
 	public void resetFlags() {
@@ -58,5 +67,8 @@ public class KeyboardInput implements KeyListener {
 		GARGOYLE	= false;
 		VEGETARIAN	= false;
 		BERSERKER	= false;
+		BILLY_SP	= false;
+		ZOMBIE_SP	= false;
+		CHECKPOINT	= false;
 	}
 }
