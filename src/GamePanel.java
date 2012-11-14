@@ -29,7 +29,7 @@ public class GamePanel extends JPanel implements Runnable {
 	private boolean showSaveDialog = false;
 	private boolean showSelectedItem = false;
 	private String strSelected;
-	private int counter = 0;
+	private int counter, counterUndo = 0;
 	public static GamePanel instance;
 
 	public GamePanel() {
@@ -176,39 +176,47 @@ public class GamePanel extends JPanel implements Runnable {
 	int timerfps = 0;
 
 	private void update() {
+		counterUndo += diffTime;
 		scrollMap();
 		
 		if(keyboardInput.BILLY_SP) {
+			counter = 0;
 			itemId = 1;
 			strSelected = "Billy Spawn Point";
 			showSelectedItem = true;
 		}
 		if(keyboardInput.ZOMBIE_SP) {
+			counter = 0;
 			itemId = 2;
 			strSelected = "Zombie Spawn Point";
 			showSelectedItem = true;
 		}
 		if(keyboardInput.CHECKPOINT) {
+			counter = 0;
 			itemId = 3;
 			strSelected = "Checkpoint";
 			showSelectedItem = true;
 		}
 		if(keyboardInput.DEMON) {
+			counter = 0;
 			itemId = 4;
 			strSelected = "Demon";
 			showSelectedItem = true;
 		}
 		if(keyboardInput.GARGOYLE) {
+			counter = 0;
 			itemId = 5;
 			strSelected = "Gargoyle";
 			showSelectedItem = true;
 		}
 		if(keyboardInput.VEGETARIAN) {
+			counter = 0;
 			itemId = 6;
 			strSelected = "Vegetarian";
 			showSelectedItem = true;
 		}
 		if(keyboardInput.BERSERKER) {
+			counter = 0;
 			itemId = 7;
 			strSelected = "Berserker";
 			showSelectedItem = true;
@@ -216,7 +224,7 @@ public class GamePanel extends JPanel implements Runnable {
 		
 		if(showSelectedItem) {
 			counter += diffTime;
-			if(counter >= 5000) {
+			if(counter >= 4000) {
 				showSelectedItem = false;
 				counter = 0;
 			}
@@ -225,6 +233,15 @@ public class GamePanel extends JPanel implements Runnable {
 		if(keyboardInput.ESCAPE) {
 			showSaveDialog = true;
 			keyboardInput.ESCAPE = false;
+		}
+		
+		if(keyboardInput.CONTROL && keyboardInput.Z) {
+			if(itens.size() > 0) {
+				if(counterUndo >= 500) {
+					counterUndo = 0;
+					itens.remove(itens.size()-1);
+				}
+			}
 		}
 		
 		if(mouseInput.clicked) {
