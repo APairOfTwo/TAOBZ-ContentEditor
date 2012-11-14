@@ -29,7 +29,8 @@ public class GamePanel extends JPanel implements Runnable {
 	private boolean showSaveDialog = false;
 	private boolean showSelectedItem = false;
 	private String strSelected;
-	private int counter, counterUndo = 0;
+	private int counter = 0;
+	private long counterUndo = 0;
 	public static GamePanel instance;
 
 	public GamePanel() {
