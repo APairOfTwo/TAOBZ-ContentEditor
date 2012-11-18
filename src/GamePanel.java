@@ -222,6 +222,12 @@ public class GamePanel extends JPanel implements Runnable {
 			strSelected = "Berserker";
 			showSelectedItem = true;
 		}
+		if(keyboardInput.TILEWALL) {
+			counter = 0;
+			itemId = 8;
+			strSelected = "Tile Wall";
+			showSelectedItem = true;
+		}
 		
 		if(showSelectedItem) {
 			counter += diffTime;
@@ -291,7 +297,7 @@ public class GamePanel extends JPanel implements Runnable {
 				break;
 			case 3:
 				dbg.setColor(Color.YELLOW);
-				dbg.fillRect(itens.get(i).x*16-map.MapX, itens.get(i).y*16-map.MapY, 10, 85);
+				dbg.fillRect(itens.get(i).x*16-map.MapX, itens.get(i).y*16-map.MapY, 16, 64);
 				break;
 			case 4:
 				dbg.drawImage(demon, itens.get(i).x*16-map.MapX, itens.get(i).y*16-map.MapY, null);
@@ -304,6 +310,10 @@ public class GamePanel extends JPanel implements Runnable {
 				break;
 			case 7:
 				dbg.drawImage(berserker, itens.get(i).x*16-map.MapX, itens.get(i).y*16-map.MapY, null);
+				break;
+			case 8:
+				dbg.setColor(Color.MAGENTA);
+				dbg.fillRect(itens.get(i).x*16-map.MapX, itens.get(i).y*16-map.MapY, 16, 64);
 				break;
 			}
 		}
@@ -318,8 +328,8 @@ public class GamePanel extends JPanel implements Runnable {
 		dbg.setColor(Color.WHITE);
 		if(itemId == 0) {
 			dbg.drawRect(mouseInput.blockX*16-map.MapX, mouseInput.blockY*16-map.MapY, 16, 16);
-		} else if(itemId == 3) {
-			dbg.drawRect(mouseInput.blockX*16-map.MapX, mouseInput.blockY*16-map.MapY, 10, 85);
+		} else if(itemId == 3 || itemId == 8) {
+			dbg.drawRect(mouseInput.blockX*16-map.MapX, mouseInput.blockY*16-map.MapY, 16, 64);
 		} else {
 			dbg.drawRect(mouseInput.blockX*16-map.MapX, mouseInput.blockY*16-map.MapY, 70, 85);
 		}
