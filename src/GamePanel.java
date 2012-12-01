@@ -228,6 +228,12 @@ public class GamePanel extends JPanel implements Runnable {
 			strSelected = "Tile Wall";
 			showSelectedItem = true;
 		}
+		if(keyboardInput.ENDMAP) {
+			counter = 0;
+			itemId = 9;
+			strSelected = "End Map";
+			showSelectedItem = true;
+		}
 		
 		if(showSelectedItem) {
 			counter += diffTime;
@@ -315,6 +321,10 @@ public class GamePanel extends JPanel implements Runnable {
 				dbg.setColor(Color.MAGENTA);
 				dbg.fillRect(itens.get(i).x*16-map.MapX, itens.get(i).y*16-map.MapY, 16, 64);
 				break;
+			case 9:
+				dbg.setColor(Color.CYAN);
+				dbg.fillRect(itens.get(i).x*16-map.MapX, itens.get(i).y*16-map.MapY, 16, 64);
+				break;
 			}
 		}
 		
@@ -328,7 +338,7 @@ public class GamePanel extends JPanel implements Runnable {
 		dbg.setColor(Color.WHITE);
 		if(itemId == 0) {
 			dbg.drawRect(mouseInput.blockX*16-map.MapX, mouseInput.blockY*16-map.MapY, 16, 16);
-		} else if(itemId == 3 || itemId == 8) {
+		} else if(itemId == 3 || itemId == 8 || itemId == 9) {
 			dbg.drawRect(mouseInput.blockX*16-map.MapX, mouseInput.blockY*16-map.MapY, 16, 64);
 		} else {
 			dbg.drawRect(mouseInput.blockX*16-map.MapX, mouseInput.blockY*16-map.MapY, 70, 85);

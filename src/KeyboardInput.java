@@ -17,6 +17,7 @@ public class KeyboardInput implements KeyListener {
 	public boolean BILLY_SP		= false;
 	public boolean ZOMBIE_SP	= false;
 	public boolean CHECKPOINT	= false;
+	public boolean ENDMAP	= false;
 	public boolean TILEWALL	= false;
 
 	public void keyTyped(KeyEvent e) {}
@@ -39,6 +40,7 @@ public class KeyboardInput implements KeyListener {
 		if (intKeyCode == KeyEvent.VK_6)		VEGETARIAN	= true;
 		if (intKeyCode == KeyEvent.VK_7)		BERSERKER	= true;
 		if (intKeyCode == KeyEvent.VK_8)		TILEWALL	= true;
+		if (intKeyCode == KeyEvent.VK_9)		ENDMAP	= true;
 	}
 
 	public void keyReleased(KeyEvent e) {
@@ -59,6 +61,7 @@ public class KeyboardInput implements KeyListener {
 		if (intKeyCode == KeyEvent.VK_6)		VEGETARIAN	= false;
 		if (intKeyCode == KeyEvent.VK_7)		BERSERKER	= false;
 		if (intKeyCode == KeyEvent.VK_8)		TILEWALL	= false;
+		if (intKeyCode == KeyEvent.VK_9)		ENDMAP	= false;
 	}
 
 }
